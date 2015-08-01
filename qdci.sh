@@ -2,10 +2,6 @@
 
 cd "`dirname $0`"
 
-echo Cleaning up any old VMs and config
-rm -f .git-branch.yaml
-vagrant destroy -f
-
 if [ "$1" = "" ]
 then
 	echo Please enter the name of the branch you would like to test
@@ -16,6 +12,10 @@ then
 	echo 
 	exit
 fi
+
+echo Cleaning up any old VMs and config
+rm -f .git-branch.yaml
+vagrant destroy -f
 
 # save the branch in a temporary file that the Vagrantfile can find
 echo branch: $1 > .git-branch.yaml
