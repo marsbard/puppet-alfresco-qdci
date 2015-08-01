@@ -28,6 +28,7 @@ Vagrant.configure('2') do |config|
         /vagrant/start.sh centos42f " + git['branch']
     end
   end
+
   config.vm.define "ubuntu50x" do |ubuntu50x|
     ubuntu50x.vm.provider :digital_ocean do |provider, override|
       override.ssh.private_key_path = cnf['private_key_path']
@@ -37,7 +38,7 @@ Vagrant.configure('2') do |config|
       #provider.image = "centos-7-0-x64"
       provider.image = 'ubuntu-14-04-x64'
       provider.region = cnf['digital_ocean_region']
-      provider.size = '512mb'
+      provider.size = '4gb'
     end
     ubuntu50x.vm.provision :shell do |shell|
       shell.inline = "OS=`cat /etc/issue | head -n1 | cut -f1 -d' '`; \

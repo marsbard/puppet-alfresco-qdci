@@ -2,7 +2,9 @@
 
 cd "`dirname $0`"
 
+echo Cleaning up any old VMs and config
 rm -f .git-branch.yaml
+vagrant destroy -f
 
 if [ "$1" = "" ]
 then

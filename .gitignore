@@ -2,3 +2,4 @@ config.yaml
 modules
 .vagrant
 puppet-alfresco
+.git-branch.yaml
