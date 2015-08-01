@@ -2,6 +2,8 @@
 
 cd "`dirname $0`"
 
+rm -f .git-branch.yaml
+
 if [ "$1" = "" ]
 then
 	echo Please enter the name of the branch you would like to test
