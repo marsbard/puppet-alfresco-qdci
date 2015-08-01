@@ -1,10 +1,11 @@
 #!/bin/bash
 
 TYPE=$1
+BRANCH=$2
 
 cd /root
 
-git clone https://github.com/marsbard/puppet-alfresco.git
+git clone https://github.com/marsbard/puppet-alfresco.git --single-branch -b $BRANCH
 
 cd puppet-alfresco
 
