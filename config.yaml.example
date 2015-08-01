@@ -4,6 +4,11 @@
 #   "You must specify the override.ssh.private_key_path to enable authentication with the droplet.
 #   The provider will create a new Digital Ocean SSH key using your public key which is assumed
 #   to be the private_key_path with a .pub extension."
+#
+#   If you already have a private key registered with DO then you will get an error if you try to 
+#   use the same one (seems a bit lame but there you go) so if you have registered an RSA key you 
+#   can try to make a new DSA key for example with `ssh-keygen -t dsa` or else create a key in 
+#   a new location and use that path here
 private_key_path: ~/.ssh/id_rsa
 
 # the region you want to run in, try running 'vagrant digitalocean-list regions $DIGITAL_OCEAN_TOKEN' (same token as below)
