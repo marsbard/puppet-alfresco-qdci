@@ -16,4 +16,4 @@ fi
 # save the branch in a temporary file that the Vagrantfile can find
 echo branch: $1 > .git-branch.yaml
 
-vagrant up --provider=digital_ocean 
+vagrant up --provider=digital_ocean ubuntu50x

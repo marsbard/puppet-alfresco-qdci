@@ -47,7 +47,7 @@ Vagrant.configure('2') do |config|
           yum -y update; \
         fi; \
         /vagrant/bootstrap.sh; \
-        /vagrant/start.sh ubuntu50x"
+        /vagrant/start.sh ubuntu50x " + git['branch']
     end
   end
 end
