@@ -26,12 +26,13 @@ Vagrant.configure('2') do |config|
         else \
           yum -y update; \
         fi; \
-        /vagrant/bootstrap.sh"
+        /vagrant/bootstrap.sh; \
+        /vagrant/start.sh centos42f"
     end
-    centos42f.vm.provision :puppet do |puppet|
-      puppet.manifests_path = "puppet-alfresco/manifests"
-      puppet.manifest_file  = "../../centos42f.pp"
-      puppet.module_path = ["puppet-alfresco/modules"]
-    end
+    # centos42f.vm.provision :puppet do |puppet|
+    #   puppet.manifest_file  = "centos42f.pp"
+    #   puppet.manifests_path = "manifests"
+    #   puppet.module_path = ["modules"]
+    # end
   end
 end
