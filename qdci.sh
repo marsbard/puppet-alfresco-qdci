@@ -15,9 +15,9 @@ fi
 
 echo Cleaning up any old VMs and config
 rm -f .git-branch.yaml
-vagrant destroy -f
 
 # save the branch in a temporary file that the Vagrantfile can find
 echo branch: $1 > .git-branch.yaml
 
+vagrant destroy -f
 vagrant up --provider=digital_ocean ubuntu50x
