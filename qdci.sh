@@ -1,7 +1,6 @@
 #!/bin/bash
 
 MACHINES="centos42f centos50x ubuntu42f ubuntu50x"
-MACHINES="centos42f"
 
 cd "`dirname $0`"
 
@@ -59,19 +58,33 @@ function cleanup {
 	do
 		banner $machine >> $REPNAME
 
-		# get pid of tail and kill it
-		find_destroy_proc $TAIL_CMD $machine
-
-		# and vagrant
-		find_destroy_proc $VAG_CMD $machine
-
 		if [ -f .${machine}.log ]
 		then
 			cat .${machine}.log >> $REPNAME
-			rm .${machine}.log
+			rm -f .${machine}.log
 		else
 			echo .${machine}.log not found >> $REPNAME
 		fi
+	done
+
+	# kill $PIDS
+	for p in $PIDS
+	do
+		echo Kill $p
+		kill $p
+	done
+	sleep 2
+
+
+	for machine in $MACHINES testrig
+	do
+		# # get pid of tail and kill it
+		# find_destroy_proc $TAIL_CMD $machine
+
+		vagrant halt $machine
+
+		# # and vagrant
+		# find_destroy_proc $VAG_CMD $machine
 
 		vagrant destroy -f $machine
 	done
@@ -99,7 +112,7 @@ do
 	ADDR=`vagrant ssh $machine -- hostname -I`
 	echo $machine has address $ADDR
 ) > .${machine}.log &
-# PIDS="$PIDS $!"
+PIDS="$PIDS $!"
 done
 
 (
@@ -109,11 +122,30 @@ done
 banner Bringing up testrig VM
 vagrant up --provider=digital_ocean testrig > .testrig.log
 ) &
+PIDS="$PIDS $!"
 
 COL=32
 for machine in $MACHINES
 do
-	tail -F .${machine}.log | awk '{print "\033[${COL}m" $0 "\033[39m"}}'
+	THIS_COL="\033[${COL}m"
+	case $machine in
+		ubuntu42f)
+			tail -F .${machine}.log | awk '{print "\033[32m" $0 "\033[39m"}' &
+			PIDS="$PIDS $!"
+			;;
+		ubuntu50x)
+			tail -F .${machine}.log | awk '{print "\033[33m" $0 "\033[39m"}' &
+			PIDS="$PIDS $!"
+			;;
+		centos42f)
+			tail -F .${machine}.log | awk '{print "\033[34m" $0 "\033[39m"}' &
+			PIDS="$PIDS $!"
+			;;
+		centos50x)
+			tail -F .${machine}.log | awk '{print "\033[35m" $0 "\033[39m"}' &
+			PIDS="$PIDS $!"
+			;;
+	esac
 	COL=$(( $COL + 1 ))
 	if [ $COL -gt 38 ]
 	then
