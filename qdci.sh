@@ -15,6 +15,10 @@ then
 	exit
 fi
 
+# set the command stubs we will use and also search for when
+# killing processes
+VAG_CMD="/usr/bin/vagrant up --provider=digital_ocean"
+TAIL_CMD="tail -F"
 
 function banner {
 	echo
@@ -23,18 +27,22 @@ function banner {
 	echo ==========
 }
 
+function find_destroy_proc {
+	PID=`ps ax | grep "$*" | grep -v grep | cut -c1-5`
+	if [ ! -z $PID ]
+	then
+		kill $PID 2>&1 > /dev/null
+		wait $PID
+	fi
+
+}
+
 function cleanup {
 	mkdir -p reports
 	REPNAME=reports/`date +%Y-%m-%d_%H:%M`_QA_report.txt
 
 	banner Cleaning up and producing report $REPNAME
 
-	# kill off bg process
-	for p in $PIDS
-	do
-		kill -9 $p
-		sleep 1
-	done
 
 	banner QA Report for `cat git-branch.yaml`  `date +Y-%m-%d %H%M` > $REPNAME
 
@@ -42,14 +50,19 @@ function cleanup {
 	do
 		banner $machine >> $REPNAME
 
-		if [ -f .$machine.log ]
+		# get pid of tail and kill it
+		find_destroy_proc $TAIL_CMD $machine
+
+		# and vagrant
+		find_destroy_proc $VAG_CMD $machine
+
+		if [ -f .${machine}.log ]
 		then
 			cat .${machine}.log >> $REPNAME
 			rm .${machine}.log
 		else
 			echo .${machine}.log not found >> $REPNAME
 		fi
-
 
 		vagrant destroy -f $machine
 	done
@@ -73,11 +86,11 @@ do
 	#banner $machine
 	LOGS="${LOGS} .${machine}.log"
 (
-	vagrant up --provider=digital_ocean $machine
+	$VAG_CMD $machine
 	ADDR=`vagrant ssh $machine -- hostname -I`
-	echo $ADDR
+	echo $machine has address $ADDR
 ) > .${machine}.log &
-PIDS="$PIDS $!"
+# PIDS="$PIDS $!"
 done
 
 (
@@ -87,22 +100,13 @@ sleep $SLEEPTIME
 banner Bringing up testrig VM
 vagrant up --provider=digital_ocean testrig > .testrig.log
 ) &
-PIDS="$PIDS $!"
 
 tail -F .ubuntu42f.log | awk '{print "\033[32m" $0 "\033[39m"}' &
-PIDS="$PIDS $!"
 tail -F .ubuntu50x.log | awk '{print "\033[33m" $0 "\033[39m"}' &
-PIDS="$PIDS $!"
 tail -F .centos42f.log | awk '{print "\033[34m" $0 "\033[39m"}' &
-PIDS="$PIDS $!"
 tail -F .centos50x.log | awk '{print "\033[35m" $0 "\033[39m"}' &
-PIDS="$PIDS $!"
 tail -F .testrig.log | awk '{print "\033[36m" $0 "\033[39m"}' &
-PIDS="$PIDS $!"
 
 
 # sleep forever (cleanup is run on signal trap)
-while /bin/true
-do
-	sleep 60
-done
+wait
