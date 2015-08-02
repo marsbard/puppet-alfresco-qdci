@@ -13,8 +13,9 @@ function banner {
 
 function cleanup {
 	mkdir -p reports
-	REPNAME=`date +%Y-%m-%d_%H:%M`_QA_report.txt
+	REPNAME=reports/`date +%Y-%m-%d_%H:%M`_QA_report.txt
 
+	banner Cleaning up and producing report $REPNAME
 
 	banner QA Report for `date +Y-%m-%d %H:%M` > $REPNAME
 
