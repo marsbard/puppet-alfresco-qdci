@@ -18,6 +18,18 @@ function cleanup {
 
 	banner QA Report for `date +Y-%m-%d %H:%M` > $REPNAME
 
+	if [ "$1" = "" ]
+	then
+		echo Please enter the name of the branch you would like to test
+		echo If you actually want to test 'master' then please try that
+		echo
+		echo Otherwise you are probably looking for a branch name like
+		echo 'dev-X.Y or dev-X.Y-some-feature-branch'
+		echo
+		exit
+	fi
+
+
 	for machine in $MACHINES testrig
 	do
 		banner $machine >> $REPNAME
@@ -37,16 +49,6 @@ function cleanup {
 
 trap cleanup INT TERM EXIT
 
-if [ "$1" = "" ]
-then
-	echo Please enter the name of the branch you would like to test
-	echo If you actually want to test 'master' then please try that
-	echo
-	echo Otherwise you are probably looking for a branch name like
-	echo 'dev-X.Y or dev-X.Y-some-feature-branch'
-	echo
-	exit
-fi
 
 # TAIL=9t
 # if [ -z `which 9t` ]
@@ -103,3 +105,10 @@ tail -F .ubuntu50x.log | awk '1 {print "\033[33m" $0 "\033[39m"}' &
 tail -F .centos42f.log | awk '1 {print "\033[34m" $0 "\033[39m"}' &
 tail -F .centos50x.log | awk '1 {print "\033[35m" $0 "\033[39m"}' &
 tail -F .testrig.log | awk '1 {print "\033[36m" $0 "\033[39m"}' &
+
+
+# sleep forever (cleanup is run on signal trap)
+while /bin/true
+do
+	sleep 60
+done
