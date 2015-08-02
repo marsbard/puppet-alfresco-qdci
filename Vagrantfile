@@ -105,7 +105,7 @@ Vagrant.configure('2') do |config|
       provider.size = cnf['digital_ocean_size_testvm']
     end
     testrig.vm.provision :shell do |shell|
-      shell.inline = "apt-get update; /vagrant/bootstrap.sh\
+      shell.inline = "apt-get update; /vagrant/bootstrap.sh; \
         puppet module install puppetlabs-vcsrepo"
     end
     testrig.vm.provision :puppet do |puppet|
