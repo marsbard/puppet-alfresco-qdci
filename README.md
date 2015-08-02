@@ -6,7 +6,7 @@ We use Digital Ocean's plugin https://www.digitalocean.com/community/projects/va
 
 You need to do this if you want to play along at home:
 
-* `git clone https://github.com/marsbard/puppet-alfresco-qdci test-rig; cd test-rg`
+* `git clone https://github.com/marsbard/puppet-alfresco-qdci test-rig; cd test-rig`
 * `vagrant plugin install vagrant-digitalocean`
 * Copy `config.yaml.example` to `config.yaml` and edit it to your requirements
 * `git clone https://github.com/marsbard/puppet-alfresco.git`
