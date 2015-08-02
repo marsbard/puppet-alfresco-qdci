@@ -1,6 +1,7 @@
 #!/bin/bash
 
 MACHINES="centos42f centos50x ubuntu42f ubuntu50x"
+MACHINES="centos42f centos50x"
 
 cd "`dirname $0`"
 
@@ -28,9 +29,11 @@ function banner {
 }
 
 function find_destroy_proc {
+	echo finding $*
 	PID=`ps ax | grep "$*" | grep -v grep | cut -c1-5`
 	if [ ! -z $PID ]
 	then
+		echo killing $PID
 		kill $PID 2>&1 > /dev/null
 		wait $PID
 	fi
@@ -38,13 +41,15 @@ function find_destroy_proc {
 }
 
 function cleanup {
+
+	banner cleanup where the fuck am i `pwd`
 	mkdir -p reports
 	REPNAME=reports/`date +%Y-%m-%d_%H:%M`_QA_report.txt
 
 	banner Cleaning up and producing report $REPNAME
 
 
-	banner QA Report for `cat git-branch.yaml`  `date +Y-%m-%d %H%M` > $REPNAME
+	banner QA Report for `cat git-branch.yaml`  `date +Y-%m-%d\ %H:%M` > $REPNAME
 
 	for machine in $MACHINES testrig
 	do
