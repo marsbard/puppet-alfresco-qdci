@@ -47,7 +47,7 @@ function cleanup {
 
 	trap "" EXIT
 
-	TS=`date +Y+m+d+H+M`
+	TS=`date +%Y%m%d%H%M`
 
 	mkdir -p reports/$TS
 
@@ -57,7 +57,7 @@ function cleanup {
 	for machine in $MACHINES testrig
 	do
 		REPNAME=reports/$TS/${machine}_build_report.txt
-		banner Build Report for ${machine}:${BRANCH} `date +%Y-%m-%d\ %H:%M` > $REPNAME
+		banner Build Report for ${machine}, ${BRANCH} `date +%Y-%m-%d\ %H:%M` > $REPNAME
 		banner Producing $machine report for $BRANCH
 		banner $machine >> $REPNAME
 
@@ -142,33 +142,26 @@ vagrant up --provider=digital_ocean testrig > .testrig.log
 ) &
 PIDS="$PIDS $!"
 
-COL=32
 for machine in $MACHINES
 do
-	THIS_COL="\033[${COL}m"
 	case $machine in
 		ubuntu42f)
-			tail -F .${machine}.log | awk '{print "\033[32m" $0 "\033[39m"}' &
-			PIDS="$PIDS $!"
-			;;
-		ubuntu50x)
 			tail -F .${machine}.log | awk '{print "\033[33m" $0 "\033[39m"}' &
 			PIDS="$PIDS $!"
 			;;
-		centos42f)
-			tail -F .${machine}.log | awk '{print "\033[34m" $0 "\033[39m"}' &
+		ubuntu50x)
+			tail -F .${machine}.log | awk '{print "\033[32m" $0 "\033[39m"}' &
 			PIDS="$PIDS $!"
 			;;
-		centos50x)
+		centos42f)
 			tail -F .${machine}.log | awk '{print "\033[35m" $0 "\033[39m"}' &
 			PIDS="$PIDS $!"
 			;;
+		centos50x)
+			tail -F .${machine}.log | awk '{print "\033[34m" $0 "\033[39m"}' &
+			PIDS="$PIDS $!"
+			;;
 	esac
-	COL=$(( $COL + 1 ))
-	if [ $COL -gt 38 ]
-	then
-		COL=32
-	fi
 done
 
 
