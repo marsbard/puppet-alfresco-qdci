@@ -12,6 +12,9 @@ then
 	echo Otherwise you are probably looking for a branch name like
 	echo 'dev-X.Y or dev-X.Y-some-feature-branch'
 	echo
+	echo Beware that if you get this wrong here you will not find out
+	echo until after the VMs have been loaded, so take the time to get it
+	echo right ":-)"
 	exit
 fi
 
