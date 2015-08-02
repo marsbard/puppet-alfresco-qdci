@@ -36,7 +36,7 @@ function cleanup {
 		sleep 1
 	done
 
-	banner QA Report for `cat git-branch.yaml`  `date +Y-%m-%d %H:%M` > $REPNAME
+	banner QA Report for `cat git-branch.yaml`  `date +Y-%m-%d %H%M` > $REPNAME
 
 	for machine in $MACHINES testrig
 	do
@@ -49,6 +49,7 @@ function cleanup {
 		else
 			echo .${machine}.log not found >> $REPNAME
 		fi
+
 
 		vagrant destroy -f $machine
 	done
