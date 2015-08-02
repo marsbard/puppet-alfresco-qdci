@@ -13,7 +13,6 @@ Vagrant.configure('2') do |config|
       override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
       provider.token = cnf['digital_ocean_token']
       provider.image = "centos-7-0-x64"
-      #provider.image = 'ubuntu-15-04-x64'
       provider.region = cnf['digital_ocean_region']
       provider.size = '512mb'
     end
@@ -36,7 +35,6 @@ Vagrant.configure('2') do |config|
       override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
       provider.token = cnf['digital_ocean_token']
       provider.image = "centos-7-0-x64"
-      #provider.image = 'ubuntu-15-04-x64'
       provider.region = cnf['digital_ocean_region']
       provider.size = '512mb'
     end
@@ -58,7 +56,6 @@ Vagrant.configure('2') do |config|
       override.vm.box = 'digital_ocean'
       override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
       provider.token = cnf['digital_ocean_token']
-      #provider.image = "centos-7-0-x64"
       provider.image = 'ubuntu-14-04-x64'
       provider.region = cnf['digital_ocean_region']
       provider.size = '4gb'
@@ -81,7 +78,6 @@ Vagrant.configure('2') do |config|
       override.vm.box = 'digital_ocean'
       override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
       provider.token = cnf['digital_ocean_token']
-      #provider.image = "centos-7-0-x64"
       provider.image = 'ubuntu-14-04-x64'
       provider.region = cnf['digital_ocean_region']
       provider.size = '4gb'
@@ -97,4 +93,26 @@ Vagrant.configure('2') do |config|
         /vagrant/start.sh ubuntu50x " + git['branch']
     end
   end
+
+  config.vm.define "testrig" do |testrig|
+    testrig.vm.provider :digital_ocean do |provider, override|
+      override.ssh.private_key_path = cnf['private_key_path']
+      override.vm.box = 'digital_ocean'
+      override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
+      provider.token = cnf['digital_ocean_token']
+      provider.image = 'ubuntu-14-04-x64'
+      provider.region = cnf['digital_ocean_region']
+      provider.size = '2gb'
+    end
+    testrig.vm.provision :shell do |shell|
+      shell.inline = "apt-get update"
+    end
+    testrig.vm.provision :puppet do |puppet|
+      puppet.manifests_path = "puppet/testrig/manifests"
+      puppet.manifest_file  = "init.pp"
+      #puppet.module_path = ["modules"]
+    end
+  end
+
+
 end
