@@ -4,6 +4,18 @@ MACHINES="centos42f centos50x ubuntu42f ubuntu50x"
 
 cd "`dirname $0`"
 
+if [ "$1" = "" ]
+then
+	echo Please enter the name of the branch you would like to test
+	echo If you actually want to test 'master' then please try that
+	echo
+	echo Otherwise you are probably looking for a branch name like
+	echo 'dev-X.Y or dev-X.Y-some-feature-branch'
+	echo
+	exit
+fi
+
+
 function banner {
 	echo
 	echo ===============
@@ -17,19 +29,14 @@ function cleanup {
 
 	banner Cleaning up and producing report $REPNAME
 
+	# kill off bg process
+	for p in $PIDS
+	do
+		kill -9 $p
+		sleep 1
+	done
+
 	banner QA Report for `cat git-branch.yaml`  `date +Y-%m-%d %H:%M` > $REPNAME
-
-	if [ "$1" = "" ]
-	then
-		echo Please enter the name of the branch you would like to test
-		echo If you actually want to test 'master' then please try that
-		echo
-		echo Otherwise you are probably looking for a branch name like
-		echo 'dev-X.Y or dev-X.Y-some-feature-branch'
-		echo
-		exit
-	fi
-
 
 	for machine in $MACHINES testrig
 	do
@@ -42,7 +49,8 @@ function cleanup {
 		else
 			echo .${machine}.log not found >> $REPNAME
 		fi
-		vagrant destroy -f $machine &
+
+		vagrant destroy -f $machine
 	done
 
 	exit 0
@@ -50,35 +58,14 @@ function cleanup {
 
 trap cleanup INT TERM EXIT
 
-
-# TAIL=9t
-# if [ -z `which 9t` ]
-# then
-# 	echo For the best log experience: https://github.com/gongo/9t
-# 	echo and make sure '9t' is in your path.
-# 	echo
-# 	echo Attempting fallback to multitail
-# fi
-#
-# TAIL="multitail -c"
-# if [ -z `which multitail` ]
-# then
-# 	echo Install multitail for a nicer log experience
-# 	echo Falling back to tail
-# 	TAIL=tail
-# fi
-
 banner Working with these machines: $MACHINES
 
 # save the branch in a temporary file that the Vagrantfile can find
 echo Saving branch name $1 to .git-branch.yaml
 echo branch: $1 > .git-branch.yaml
 
-banner Cleaning up any old VMs
-vagrant destroy -f
-sleep 9
-
 LOGS=
+PIDS=
 banner Bringing VMs up
 for machine in $MACHINES
 do
@@ -89,6 +76,7 @@ do
 	ADDR=`vagrant ssh $machine -- hostname -I`
 	echo $ADDR
 ) > .${machine}.log &
+PIDS="$PIDS $!"
 done
 
 (
@@ -98,14 +86,18 @@ sleep $SLEEPTIME
 banner Bringing up testrig VM
 vagrant up --provider=digital_ocean testrig > .testrig.log
 ) &
+PIDS="$PIDS $!"
 
-$TAIL -f $LOGS .testrig.log
-
-tail -F .ubuntu42f.log | awk '1 {print "\033[32m" $0 "\033[39m"}' &
-tail -F .ubuntu50x.log | awk '1 {print "\033[33m" $0 "\033[39m"}' &
-tail -F .centos42f.log | awk '1 {print "\033[34m" $0 "\033[39m"}' &
-tail -F .centos50x.log | awk '1 {print "\033[35m" $0 "\033[39m"}' &
-tail -F .testrig.log | awk '1 {print "\033[36m" $0 "\033[39m"}' &
+tail -F .ubuntu42f.log | awk '{print "\033[32m" $0 "\033[39m"}' &
+PIDS="$PIDS $!"
+tail -F .ubuntu50x.log | awk '{print "\033[33m" $0 "\033[39m"}' &
+PIDS="$PIDS $!"
+tail -F .centos42f.log | awk '{print "\033[34m" $0 "\033[39m"}' &
+PIDS="$PIDS $!"
+tail -F .centos50x.log | awk '{print "\033[35m" $0 "\033[39m"}' &
+PIDS="$PIDS $!"
+tail -F .testrig.log | awk '{print "\033[36m" $0 "\033[39m"}' &
+PIDS="$PIDS $!"
 
 
 # sleep forever (cleanup is run on signal trap)

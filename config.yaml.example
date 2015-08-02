@@ -1,13 +1,11 @@
-
-
 # needs access to your private key:
 #   "You must specify the override.ssh.private_key_path to enable authentication with the droplet.
 #   The provider will create a new Digital Ocean SSH key using your public key which is assumed
 #   to be the private_key_path with a .pub extension."
 #
-#   If you already have a private key registered with DO then you will get an error if you try to 
-#   use the same one (seems a bit lame but there you go) so if you have registered an RSA key you 
-#   can try to make a new DSA key for example with `ssh-keygen -t dsa` or else create a key in 
+#   If you already have a private key registered with DO then you will get an error if you try to
+#   use the same one (seems a bit lame but there you go) so if you have registered an RSA key you
+#   can try to make a new DSA key for example with `ssh-keygen -t dsa` or else create a key in
 #   a new location and use that path here
 private_key_path: ~/.ssh/id_rsa
 
@@ -18,3 +16,10 @@ digital_ocean_region: 'nyc2'
 # could be a good idea to add a comment here with the DO name too, like, e.g.:
 # DOname: 'honeycomb-ci'
 digital_ocean_token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# For testing the rig, rather than the builds themselves, it is cheapest to
+# set this to 512mb, but each alfresco VM needs 4gb to build
+digital_ocean_size: 512mb
+
+# probably 2gb I think but 512mb during testing the rig
+digital_ocean_size_testvm: 512mb

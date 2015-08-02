@@ -14,7 +14,7 @@ Vagrant.configure('2') do |config|
       provider.token = cnf['digital_ocean_token']
       provider.image = "centos-7-0-x64"
       provider.region = cnf['digital_ocean_region']
-      provider.size = '512mb'
+      provider.size = '4gb'
     end
     centos42f.vm.provision :shell do |shell|
       shell.inline = "OS=`cat /etc/issue | head -n1 | cut -f1 -d' '`; \
@@ -36,7 +36,7 @@ Vagrant.configure('2') do |config|
       provider.token = cnf['digital_ocean_token']
       provider.image = "centos-7-0-x64"
       provider.region = cnf['digital_ocean_region']
-      provider.size = '512mb'
+      provider.size = '4gb'
     end
     centos50x.vm.provision :shell do |shell|
       shell.inline = "OS=`cat /etc/issue | head -n1 | cut -f1 -d' '`; \
