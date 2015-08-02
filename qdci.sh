@@ -22,6 +22,13 @@ then
 	exit
 fi
 
+TAIL=multitail
+if [ -z `which multitail` ]
+then
+	echo Install multitail for a nicer log experience
+	TAIL=tail
+fi
+
 banner Working with these machines: $MACHINES
 
 # save the branch in a temporary file that the Vagrantfile can find
@@ -32,13 +39,27 @@ banner Cleaning up any old VMs
 vagrant destroy -f
 sleep 9
 
+LOGS=
 banner Bringing VMs up
-vagrant up --parallel --provider=digital_ocean $MACHINES
 for machine in $MACHINES
 do
-	ADDR[$machine]=`vagrant ssh $machine -- hostname -I`
-	echo $ADDR[$machine]
+	banner $machine
+	LOGS="${LOGS} .${machine}.log"
+(
+	vagrant up --provider=digital_ocean $machine 
+	ADDR=`vagrant ssh $machine -- hostname -I`
+	echo $ADDR
+) > .${machine}.log & 
 done
 
+(
+SLEEPTIME=300
+banner Sleeping $SLEEPTIME seconds before bringing up testrig
+sleep $SLEEPTIME
 banner Bringing up testrig VM
-vagrant up --provider=digital_ocean testrig
+vagrant up --provider=digital_ocean testrig > .testrig.log 
+) &
+
+$TAIL $LOGS .testrig.log
+
+

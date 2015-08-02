@@ -105,7 +105,7 @@ Vagrant.configure('2') do |config|
       provider.size = '2gb'
     end
     testrig.vm.provision :shell do |shell|
-      shell.inline = "apt-get update"
+      shell.inline = "apt-get update; /vagrant/bootstrap.sh"
     end
     testrig.vm.provision :puppet do |puppet|
       puppet.manifests_path = "puppet/testrig/manifests"
