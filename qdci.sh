@@ -47,18 +47,18 @@ function cleanup {
 
 	trap "" EXIT
 
-	banner cleanup where the fuck am i `pwd`
-	mkdir -p reports
-	REPNAME=reports/`date +%Y-%m-%d_%H:%M`_QA_report.txt
+	TS=`date +Y+m+d+H+M`
+
+	mkdir -p reports/$TS
 
 	BRANCH=`cat .git-branch.yaml`
-	banner Cleaning up and producing report $REPNAME for $BRANCH
-
-
-	banner QA Report for $BRANCH `date +%Y-%m-%d\ %H:%M` > $REPNAME
+	banner Cleaning up and producing reports for $BRANCH
 
 	for machine in $MACHINES testrig
 	do
+		REPNAME=reports/$TS/${machine}_build_report.txt
+		banner Build Report for ${machine}:${BRANCH} `date +%Y-%m-%d\ %H:%M` > $REPNAME
+		banner Producing $machine report for $BRANCH
 		banner $machine >> $REPNAME
 
 		if [ -f .${machine}.log ]
@@ -68,10 +68,9 @@ function cleanup {
 			echo .${machine}.log not found >> $REPNAME
 		fi
 
-		NUMLINES=200
-		banner Getting last $NUMLINES of catalina.out on $machine for report
-		banner Last $NUMLINES lines of catalina.out on $machine >> $REPNAME
-		vagrant ssh $machine -c "tail -n $NUMLINES /opt/alfresco/tomcat/logs/catalina.out" >> $REPNAME
+		banner Appending catalina.out from $machine to report
+		banner catalina.out on $machine >> $REPNAME
+		vagrant ssh $machine -c "cat /opt/alfresco/tomcat/logs/catalina.out" >> $REPNAME
 
 
 	done

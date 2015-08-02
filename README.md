@@ -10,3 +10,10 @@ You need to do this if you want to play along at home:
 * `vagrant plugin install vagrant-digitalocean`
 * Copy `config.yaml.example` to `config.yaml` and edit it to your requirements
 * `./qdci.sh <git public branch name>`
+
+When it looks like all the logs have finished tailing, press Ctrl-C to clean up and
+generate the build reports for each machine.
+
+The build report will be in a file like reports/<timestamp>/<machine name>_build_report.txt
+
+The timestamp is a string of numbers in the form: 'YYYYMMDDhhmm'
