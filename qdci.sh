@@ -69,7 +69,10 @@ function cleanup {
 	# kill $PIDS
 	for p in $PIDS
 	do
-		kill $p 2>&1 > /dev/null
+		if [ ! -z `ps ax | cut -c1-5 | grep $p` ]
+		then
+			kill $p 2>&1 > /dev/null
+		fi
 	done
 	sleep 8
 
