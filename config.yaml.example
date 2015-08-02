@@ -19,7 +19,7 @@ digital_ocean_token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 # For testing the rig, rather than the builds themselves, it is cheapest to
 # set this to 512mb, but each alfresco VM needs 4gb to build
-digital_ocean_size: 512mb
+digital_ocean_size: 4gb
 
 # probably 2gb I think but 512mb during testing the rig
-digital_ocean_size_testvm: 512mb
+digital_ocean_size_testvm: 2gb

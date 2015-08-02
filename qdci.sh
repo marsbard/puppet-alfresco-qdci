@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MACHINES="centos42f centos50x ubuntu42f ubuntu50x"
-MACHINES="centos42f centos50x"
+MACHINES="centos42f"
 
 cd "`dirname $0`"
 
@@ -34,6 +34,7 @@ function find_destroy_proc {
 	if [ ! -z $PID ]
 	then
 		echo killing $PID
+		ps ax | grep $PID
 		kill $PID 2>&1 > /dev/null
 		wait $PID
 	fi
@@ -42,14 +43,17 @@ function find_destroy_proc {
 
 function cleanup {
 
+	trap "" EXIT
+
 	banner cleanup where the fuck am i `pwd`
 	mkdir -p reports
 	REPNAME=reports/`date +%Y-%m-%d_%H:%M`_QA_report.txt
 
-	banner Cleaning up and producing report $REPNAME
+	BRANCH=`cat .git-branch.yaml`
+	banner Cleaning up and producing report $REPNAME for $BRANCH
 
 
-	banner QA Report for `cat git-branch.yaml`  `date +Y-%m-%d\ %H:%M` > $REPNAME
+	banner QA Report for $BRANCH `date +%Y-%m-%d\ %H:%M` > $REPNAME
 
 	for machine in $MACHINES testrig
 	do
@@ -99,18 +103,23 @@ do
 done
 
 (
-SLEEPTIME=300
-#banner Sleeping $SLEEPTIME seconds before bringing up testrig
-sleep $SLEEPTIME
+# SLEEPTIME=300
+# #banner Sleeping $SLEEPTIME seconds before bringing up testrig
+# sleep $SLEEPTIME
 banner Bringing up testrig VM
 vagrant up --provider=digital_ocean testrig > .testrig.log
 ) &
 
-tail -F .ubuntu42f.log | awk '{print "\033[32m" $0 "\033[39m"}' &
-tail -F .ubuntu50x.log | awk '{print "\033[33m" $0 "\033[39m"}' &
-tail -F .centos42f.log | awk '{print "\033[34m" $0 "\033[39m"}' &
-tail -F .centos50x.log | awk '{print "\033[35m" $0 "\033[39m"}' &
-tail -F .testrig.log | awk '{print "\033[36m" $0 "\033[39m"}' &
+COL=32
+for machine in $MACHINES
+do
+	tail -F .${machine}.log | awk '{print "\033[${COL}m" $0 "\033[39m"}}'
+	COL=$(( $COL + 1 ))
+	if [ $COL -gt 38 ]
+	then
+		COL=32
+	fi
+done
 
 
 # sleep forever (cleanup is run on signal trap)
