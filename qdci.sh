@@ -66,10 +66,10 @@ echo branch: $1 > .git-branch.yaml
 
 LOGS=
 PIDS=
-banner Bringing VMs up
+#banner Bringing VMs up
 for machine in $MACHINES
 do
-	banner $machine
+	#banner $machine
 	LOGS="${LOGS} .${machine}.log"
 (
 	vagrant up --provider=digital_ocean $machine
@@ -81,7 +81,7 @@ done
 
 (
 SLEEPTIME=300
-banner Sleeping $SLEEPTIME seconds before bringing up testrig
+#banner Sleeping $SLEEPTIME seconds before bringing up testrig
 sleep $SLEEPTIME
 banner Bringing up testrig VM
 vagrant up --provider=digital_ocean testrig > .testrig.log
