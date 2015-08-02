@@ -17,7 +17,7 @@ function cleanup {
 
 	banner Cleaning up and producing report $REPNAME
 
-	banner QA Report for `date +Y-%m-%d %H:%M` > $REPNAME
+	banner QA Report for `cat git-branch.yaml`  `date +Y-%m-%d %H:%M` > $REPNAME
 
 	if [ "$1" = "" ]
 	then
