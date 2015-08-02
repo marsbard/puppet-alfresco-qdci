@@ -41,8 +41,8 @@ function find_destroy_proc {
 }
 
 # Random unsigned integer from /dev/random (0-65535)
-RND=`dd if=/dev/random count=1 bs=2 2>/dev/null | od -i | awk '{print $2}' | head -1`
-echo $RND > .rnd
+RND=`dd if=/dev/random count=1 bs=2 2>/dev/null | od -i | awk '{print $2}' | head -1`x
+echo rnd: $RND > .rnd
 
 function cleanup {
 

@@ -6,7 +6,7 @@ git = YAML::load_file(File.join(__dir__, '.git-branch.yaml'))
 
 Vagrant.configure('2') do |config|
 
-  config.vm.define "centos42f" do |centos42f|
+  config.vm.define "centos42f"  do |centos42f|
     centos42f.vm.provider :digital_ocean do |provider, override|
       override.ssh.private_key_path = cnf['private_key_path']
       override.vm.box = 'digital_ocean'
@@ -28,7 +28,7 @@ Vagrant.configure('2') do |config|
     end
   end
 
-  config.vm.define "centos50x" do |centos50x|
+  config.vm.define "centos50x"  do |centos50x|
     centos50x.vm.provider :digital_ocean do |provider, override|
       override.ssh.private_key_path = cnf['private_key_path']
       override.vm.box = 'digital_ocean'
@@ -105,7 +105,8 @@ Vagrant.configure('2') do |config|
       provider.size = cnf['digital_ocean_size_testvm']
     end
     testrig.vm.provision :shell do |shell|
-      shell.inline = "apt-get update; /vagrant/bootstrap.sh"
+      shell.inline = "apt-get update; /vagrant/bootstrap.sh\
+        puppet module install puppetlabs-vcsrepo"
     end
     testrig.vm.provision :puppet do |puppet|
       puppet.manifests_path = "puppet/testrig/manifests"
