@@ -10,3 +10,5 @@ class testrig {
     source   => 'https://github.com/digcat/alfresco-tests.git',
   }
 }
+
+class { 'testrig': }
