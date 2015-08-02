@@ -64,7 +64,15 @@ function cleanup {
 		else
 			echo .${machine}.log not found >> $REPNAME
 		fi
+
+		NUMLINES=200
+		banner Getting last $NUMLINES of catalina.out on $machine for report
+		banner Last $NUMLINES lines of catalina.out on $machine >> $REPNAME
+		vagrant ssh $machine -c "tail -n $NUMLINES /opt/alfresco/tomcat/logs/catalina.out" >> $REPNAME
+
+
 	done
+
 
 	# kill $PIDS
 	for p in $PIDS
