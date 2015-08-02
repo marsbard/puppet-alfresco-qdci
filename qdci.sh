@@ -40,6 +40,10 @@ function find_destroy_proc {
 
 }
 
+# Random unsigned integer from /dev/random (0-65535)
+RND=`dd if=/dev/random count=1 bs=2 2>/dev/null | od -i | awk '{print $2}' | head -1`
+echo $RND > .rnd
+
 function cleanup {
 
 	trap "" EXIT
@@ -73,11 +77,13 @@ function cleanup {
 		echo Kill $p
 		kill $p
 	done
-	sleep 2
+	sleep 8
 
 
 	for machine in $MACHINES testrig
 	do
+		echo Try to shut down and destroy $machine
+
 		# # get pid of tail and kill it
 		# find_destroy_proc $TAIL_CMD $machine
 
