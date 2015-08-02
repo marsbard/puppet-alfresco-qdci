@@ -1,4 +1,7 @@
 class testrig {
+
+  class { 'vcsrepo': }
+
   file { '/root/wait-for-server.sh':
     source => 'puppet:///modules/testrig/wait-for-server.sh',
     ensure => present,
