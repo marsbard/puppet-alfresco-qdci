@@ -24,4 +24,4 @@ fi
 
 cp /vagrant/manifests/${TYPE}.pp .
 
-puppet apply --modulepath=modules ${TYPE}.pp
+puppet apply --color=false --modulepath=modules ${TYPE}.pp
