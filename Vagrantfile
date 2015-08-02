@@ -94,8 +94,8 @@ Vagrant.configure('2') do |config|
     end
   end
 
-  config.vm.define "testrig1" do |testrig1|
-    testrig1.vm.provider :digital_ocean do |provider, override|
+  config.vm.define "testrig" do |testrig|
+    testrig.vm.provider :digital_ocean do |provider, override|
       override.ssh.private_key_path = cnf['private_key_path']
       override.vm.box = 'digital_ocean'
       override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
@@ -104,13 +104,12 @@ Vagrant.configure('2') do |config|
       provider.region = cnf['digital_ocean_region']
       provider.size = cnf['digital_ocean_size_testvm']
     end
-    testrig1.vm.provision :shell do |shell|
+    testrig.vm.provision :shell do |shell|
       shell.inline = "apt-get update; /vagrant/bootstrap.sh"
     end
-    testrig1.vm.provision :puppet do |puppet|
+    testrig.vm.provision :puppet do |puppet|
       puppet.manifests_path = "puppet/testrig/manifests"
       puppet.manifest_file  = "init.pp"
-      #puppet.module_path = ["modules"]
     end
   end
 

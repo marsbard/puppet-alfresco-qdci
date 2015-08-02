@@ -65,7 +65,6 @@ function cleanup {
 		if [ -f .${machine}.log ]
 		then
 			cat .${machine}.log >> $REPNAME
-			rm -f .${machine}.log
 		else
 			echo .${machine}.log not found >> $REPNAME
 		fi
@@ -74,26 +73,30 @@ function cleanup {
 	# kill $PIDS
 	for p in $PIDS
 	do
-		echo Kill $p
-		kill $p
+		kill $p 2>&1 > /dev/null
 	done
 	sleep 8
 
 
 	for machine in $MACHINES testrig
 	do
-		echo Try to shut down and destroy $machine
+		rm -f .${machine}.log
 
-		# # get pid of tail and kill it
-		# find_destroy_proc $TAIL_CMD $machine
-
-		vagrant halt $machine
-
-		# # and vagrant
-		# find_destroy_proc $VAG_CMD $machine
-
-		vagrant destroy -f $machine
+		# echo Try to shut down and destroy $machine
+		#
+		# # # get pid of tail and kill it
+		# # find_destroy_proc $TAIL_CMD $machine
+		#
+		# vagrant halt $machine
+		#
+		# # # and vagrant
+		# # find_destroy_proc $VAG_CMD $machine
+		#
+		# vagrant destroy -f $machine
 	done
+
+	banner No machines were destroyed, running vagrant status:
+	vagrant status
 
 	exit 0
 }
