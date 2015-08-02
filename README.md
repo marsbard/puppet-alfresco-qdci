@@ -9,5 +9,4 @@ You need to do this if you want to play along at home:
 * `git clone https://github.com/marsbard/puppet-alfresco-qdci test-rig; cd test-rig`
 * `vagrant plugin install vagrant-digitalocean`
 * Copy `config.yaml.example` to `config.yaml` and edit it to your requirements
-* `git clone https://github.com/marsbard/puppet-alfresco.git`
-* `./qdci.sh`
+* `./qdci.sh <git public branch name>`
