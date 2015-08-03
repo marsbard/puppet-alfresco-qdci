@@ -52,16 +52,16 @@ function try_tests {
         then
         # run the tests
         echo $machine is up and ready, running the tests
-        #echo Put code here for running the tests...
 
-        pushd tests-${machine}
+        #pushd tests-${machine}
         if [ -z $installed_pydeps ]
           then
           ./install.sh | awk -vwhich=tests_${machine} '{print which ": " $0}'
           installed_pydeps=/root/tests-${machine}
         fi
         ./runtests.sh  ${installed_pydeps}/testing_virt/venv/bin | awk -vwhich=tests_${machine} '{print which ": " $0}'
-        popd
+        TRES=$? # 0 if all was well
+        #popd
         # after tests are completed
         tested[$machine]=1
         tested_count=$(( $tested_count + 1 ))
@@ -69,7 +69,7 @@ function try_tests {
     fi
   done
 
-  # if we got here then we haven't tested everything
+
   # return the number remaining to do
   return $(( ${#addrs[@]} - $tested_count))
 }
@@ -77,7 +77,7 @@ function try_tests {
 ###########################################
 
 # First... really quick and dirty, clone tests once for each machine
-# and modify the config file
+# and modify the config file (replace 'localhost' with the ip address)
 for machine in ${!addrs[@]}
 do
   git clone https://github.com/digcat/alfresco-tests.git tests-${machine}

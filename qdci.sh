@@ -150,7 +150,8 @@ do
 	sleep 20
 done
 banner Got all IP addresses - bringing up testrig VM
-# we need the machine list in the testrig invocation
+# we need the machine list in the testrig - it gets copied up with the
+# rsync from vagrant
 export MACHINES
 for machine in $MACHINES
 do
@@ -162,6 +163,7 @@ vagrant up --provider=digital_ocean testrig > .testrig.log
 ) &
 PIDS="$PIDS $!"
 
+# set up different coloured tails per machine build log
 for machine in $MACHINES
 do
 	case $machine in
@@ -183,6 +185,7 @@ do
 			;;
 	esac
 done
+# and a tail for the testrig build log
 tail -qF .testrig.log | awk '{print "\033[36m" $0 "\033[39m"}' 2> /dev/null &
 PIDS="$PIDS $!"
 
