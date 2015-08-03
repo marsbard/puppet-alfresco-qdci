@@ -58,9 +58,9 @@ function try_tests {
         if [ -z $installed_pydeps ]
           then
           ./install.sh | awk -vwhich=tests_${machine} '{print which ": " $0}'
-          installed_pydeps=1
+          installed_pydeps=/root/tests-${machine}
         fi
-        ./runtests.sh  testing_virt/venv/bin | awk -vwhich=tests_${machine} '{print which ": " $0}'
+        ./runtests.sh  ${installed_pydeps}/testing_virt/venv/bin | awk -vwhich=tests_${machine} '{print which ": " $0}'
         popd
         # after tests are completed
         tested[$machine]=1

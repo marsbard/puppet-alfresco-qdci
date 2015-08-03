@@ -166,7 +166,7 @@ for machine in $MACHINES
 do
 	case $machine in
 		ubuntu42f)
-			tail -qF .${machine}.log | awk '{print "\033[32m" $0 "\033[39m"}' 2> /dev/null &
+			tail -qF .${machine}.log | awk '{print "\033[34m" $0 "\033[39m"}' 2> /dev/null &
 			PIDS="$PIDS $!"
 			;;
 		ubuntu50x)
@@ -178,7 +178,7 @@ do
 			PIDS="$PIDS $!"
 			;;
 		centos50x)
-			tail -qF .${machine}.log | awk '{print "\033[34m" $0 "\033[39m"}' 2> /dev/null &
+			tail -qF .${machine}.log | awk '{print "\033[32m" $0 "\033[39m"}' 2> /dev/null &
 			PIDS="$PIDS $!"
 			;;
 	esac
