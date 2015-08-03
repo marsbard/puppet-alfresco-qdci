@@ -1,7 +1,6 @@
 #!/bin/bash
 
 MACHINES="centos42f centos50x ubuntu42f ubuntu50x"
-MACHINES=ubuntu50x
 
 cd "`dirname $0`"
 

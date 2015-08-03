@@ -109,14 +109,18 @@ Vagrant.configure('2') do |config|
         puppet module install puppetlabs-vcsrepo"
     end
 
-    testrig.vm.provision :shell do |shell|
-      shell.path = "testrig-setup.sh"
-    end
-
     testrig.vm.provision :puppet do |puppet|
       puppet.manifests_path = "puppet/testrig/manifests"
       puppet.manifest_file  = "init.pp"
     end
+
+
+    testrig.vm.provision :shell do |shell|
+      shell.path = "testrig-setup.sh"
+    end
+
+
+
   end
 
 

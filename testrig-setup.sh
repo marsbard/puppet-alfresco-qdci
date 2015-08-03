@@ -2,7 +2,6 @@
 
 cd /root
 IPS_PATH=/vagrant/.machine_ips.txt
-#IPS_PATH=./.machine_ips.txt
 
 WGET_TIMEOUT=20
 
