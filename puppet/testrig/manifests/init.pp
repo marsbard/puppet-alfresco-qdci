@@ -1,20 +1,28 @@
 class testrig {
 
-# it's not a module >.<
-#  file { '/root/wait-for-server.sh':
-#    source => 'puppet:///modules/testrig/wait-for-server.sh',
-#    ensure => present,
-#  }
-
-
-
-  package { 'git': ensure => present, } ->
-  file { '/root/alfresco-tests': ensure => absent, } ->
-  exec { 'git-clone-tests':
-    command => '/usr/bin/git clone https://github.com/digcat/alfresco-tests.git',
-    cwd => '/root',
+  define ensure_packages ($ensure = "present") {
+    if defined(Package[$title]) {}
+    else {
+      package { $title : ensure => $ensure, }
+    }
   }
 
+  $packages = [
+    'git',
+    'python-pip',
+    'python-dev',
+    'xvfb',
+    'build-essential',
+    'python-setuptools',
+    'python-numpy',
+    'python-scipy',
+    'libatlas-dev',
+    'libatlas3gf-base',
+    'firefox',
+  ]
+
+  ensure_packages { $packages: }
+  -> exec{'/usr/bin/pip install configure'}
 }
 
 class { 'testrig': }

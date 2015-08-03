@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#cd /root
+cd /root
 IPS_PATH=/vagrant/.machine_ips.txt
-IPS_PATH=./.machine_ips.txt
+#IPS_PATH=./.machine_ips.txt
 
 WGET_TIMEOUT=20
 
@@ -39,8 +39,9 @@ function check_httpserv_up {
 
 declare -A tested
 tested_count=0
+installed_pydeps=
 function try_tests {
-  echo keys=${!addrs[@]}
+  #echo keys=${!addrs[@]}
   for machine in ${!addrs[@]}
   do
     echo machine=$machine
@@ -52,18 +53,20 @@ function try_tests {
         then
         # run the tests
         echo $machine is up and ready, running the tests
-        echo Put code here for running the tests...
+        #echo Put code here for running the tests...
 
-
+        pushd tests-${machine}
+        if [ -z $installed_pydeps ]
+          then
+          ./install.sh | awk -vwhich=tests_${machine} '{print which ": " $0}'
+          installed_pydeps=1
+        fi
+        ./runtests.sh | awk -vwhich=tests_${machine} '{print which ": " $0}'
+        popd
         # after tests are completed
         tested[$machine]=1
         tested_count=$(( $tested_count + 1 ))
       fi
-      # if [ $tested_count == "${#addrs[@]}" ]
-      #   then
-      #   # everything has been tested, we can end
-      #   return 0
-      # fi
     fi
   done
 
@@ -71,6 +74,17 @@ function try_tests {
   # return the number remaining to do
   return $(( ${#addrs[@]} - $tested_count))
 }
+
+###########################################
+
+# First... really quick and dirty, clone tests once for each machine
+# and modify the config file
+for machine in ${!addrs[@]}
+do
+  git clone https://github.com/digcat/alfresco-tests.git tests-${machine}
+  cat tests-${machine}/config.yml | sed "s/localhost/${addrs[$machine]}/" > .tmp.config.yml
+  mv .tmp.config.yml tests-${machine}/config.yml
+done
 
 
 while true
