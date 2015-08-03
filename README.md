@@ -14,6 +14,6 @@ You need to do this if you want to play along at home:
 When it looks like all the logs have finished tailing, press Ctrl-C to clean up and
 generate the build reports for each machine.
 
-The build report will be in a file like reports/<timestamp>/<machine name>_build_report.txt
+The build report will be in a file like reports/\<timestamp\>/<machine name>_build_report.txt
 
 The timestamp is a string of numbers in the form: 'YYYYMMDDhhmm'
