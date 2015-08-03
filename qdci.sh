@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MACHINES="centos42f centos50x ubuntu42f ubuntu50x"
-MACHINE=ubuntu50x
+MACHINES=ubuntu50x
 
 cd "`dirname $0`"
 
@@ -144,45 +144,48 @@ done
 # testrig machine
 COUNT=0
 MACH_LIST=( $MACHINES )
+IPS=""
 while [ $COUNT -lt ${#MACH_LIST[@]} ]
 do
-	COUNT=`ls .ip.* | wc -l`
+	COUNT=`ls .ip.* 2> /dev/null | wc -l`
 	sleep 20
 done
 banner Got all IP addresses - bringing up testrig VM
 # we need the machine list in the testrig invocation
 export MACHINES
+for machine in $MACHINES
+do
+	IPS="$IPS ${machine}=`cat .ip.${machine}`"
+	export IPS
+	echo $IPS > .machine_ips.txt
+done
 vagrant up --provider=digital_ocean testrig > .testrig.log
 ) &
 PIDS="$PIDS $!"
 
-IPS=""
 for machine in $MACHINES
 do
 	case $machine in
 		ubuntu42f)
-			tail -F .${machine}.log | awk '{print "\033[33m" $0 "\033[39m"}' &
+			tail -qF .${machine}.log | awk '{print "\033[32m" $0 "\033[39m"}' 2> /dev/null &
 			PIDS="$PIDS $!"
 			;;
 		ubuntu50x)
-			tail -F .${machine}.log | awk '{print "\033[32m" $0 "\033[39m"}' &
+			tail -qF .${machine}.log | awk '{print "\033[33m" $0 "\033[39m"}' 2> /dev/null &
 			PIDS="$PIDS $!"
 			;;
 		centos42f)
-			tail -F .${machine}.log | awk '{print "\033[35m" $0 "\033[39m"}' &
+			tail -qF .${machine}.log | awk '{print "\033[35m" $0 "\033[39m"}' 2> /dev/null &
 			PIDS="$PIDS $!"
 			;;
 		centos50x)
-			tail -F .${machine}.log | awk '{print "\033[34m" $0 "\033[39m"}' &
+			tail -qF .${machine}.log | awk '{print "\033[34m" $0 "\033[39m"}' 2> /dev/null &
 			PIDS="$PIDS $!"
 			;;
 	esac
-	IPS="$IPS ${machine}=`cat .ip.${machine}`"
-
 done
-export IPS
-echo $IPS > .machine_ips.txt
-
+tail -qF .testrig.log | awk '{print "\033[36m" $0 "\033[39m"}' 2> /dev/null &
+PIDS="$PIDS $!"
 
 # sleep forever (cleanup is run on signal trap)
 wait
