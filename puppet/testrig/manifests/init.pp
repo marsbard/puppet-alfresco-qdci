@@ -22,7 +22,7 @@ class testrig {
   ]
 
   ensure_packages { $packages: }
-  -> exec{'/usr/bin/pip install configure'}
+  -> exec{'/usr/bin/pip install configure':}
 }
 
 class { 'testrig': }

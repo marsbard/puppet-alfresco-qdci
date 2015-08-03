@@ -61,7 +61,7 @@ function try_tests {
           ./install.sh | awk -vwhich=tests_${machine} '{print which ": " $0}'
           installed_pydeps=1
         fi
-        ./runtests.sh | awk -vwhich=tests_${machine} '{print which ": " $0}'
+        ./runtests.sh  testing_virt/venv/bin | awk -vwhich=tests_${machine} '{print which ": " $0}'
         popd
         # after tests are completed
         tested[$machine]=1
