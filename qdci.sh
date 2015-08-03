@@ -118,6 +118,10 @@ banner Working with these machines: $MACHINES
 echo Saving branch name $1 to .git-branch.yaml
 echo branch: $1 > .git-branch.yaml
 
+# remove old IP addresses
+rm -f .ip.*
+rm -f .addresses.yaml
+
 LOGS=
 PIDS=
 #banner Bringing VMs up
@@ -129,19 +133,29 @@ do
 	$VAG_CMD $machine
 	ADDR=`vagrant ssh $machine -- hostname -I`
 	echo $machine has address $ADDR
+	echo $ADDR > .ip.$machine
 ) > .${machine}.log &
 PIDS="$PIDS $!"
 done
 
 (
-# SLEEPTIME=300
-# #banner Sleeping $SLEEPTIME seconds before bringing up testrig
-# sleep $SLEEPTIME
-banner Bringing up testrig VM
+# wait for all machines to have told us their IP addresses before starting
+# testrig machine
+COUNT=0
+MACH_LIST=( $MACHINES )
+while [ $COUNT -lt ${#MACH_LIST[@]} ]
+do
+	COUNT=`ls .ip.* | wc -l`
+	sleep 20
+done
+banner Got all IP addresses - bringing up testrig VM
+# we need the machine list in the testrig invocation
+export MACHINES
 vagrant up --provider=digital_ocean testrig > .testrig.log
 ) &
 PIDS="$PIDS $!"
 
+IPS=""
 for machine in $MACHINES
 do
 	case $machine in
@@ -162,7 +176,10 @@ do
 			PIDS="$PIDS $!"
 			;;
 	esac
+	IPS="$IPS ${machine}=`cat .ip.${machine}`"
+
 done
+export IPS
 
 
 # sleep forever (cleanup is run on signal trap)
