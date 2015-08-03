@@ -110,7 +110,7 @@ Vagrant.configure('2') do |config|
     end
 
     testrig.vm.provision :shell do |shell|
-      shell.path = "testrig-setup.sh " + ENV['IPS']
+      shell.path = "testrig-setup.sh"
     end
 
     testrig.vm.provision :puppet do |puppet|

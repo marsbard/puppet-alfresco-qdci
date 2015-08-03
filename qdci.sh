@@ -1,6 +1,7 @@
 #!/bin/bash
 
 MACHINES="centos42f centos50x ubuntu42f ubuntu50x"
+MACHINE=ubuntu50x
 
 cd "`dirname $0`"
 
@@ -180,6 +181,7 @@ do
 
 done
 export IPS
+echo $IPS > .machine_ips.txt
 
 
 # sleep forever (cleanup is run on signal trap)

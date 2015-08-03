@@ -3,9 +3,9 @@
 cd /root
 
 declare -A addrs
-for arg in $*
+for arg in `cat .machine_ips.txt`
 do
-  # expecting machine=1.2.3.4
+  # expecting machine=1.2.3.4 
   MACH=`echo $arg | cut -f1 -d=`
   ADDR=`echo $arg | cut -f2 -d=`
   addrs[$MACH]=$ADDR
