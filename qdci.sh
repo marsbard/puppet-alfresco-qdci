@@ -168,6 +168,7 @@ IPS=""
 while [ $COUNT -lt ${#MACH_LIST[@]} ]
 do
 	COUNT=`ls .ip.* 2> /dev/null | wc -l`
+	echo "Found addresses of $COUNT machines, waiting for ${#MACH_LIST[@]}"
 	sleep 20
 done
 banner Got all IP addresses - bringing up testrig VM
