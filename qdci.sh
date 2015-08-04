@@ -18,6 +18,19 @@ then
 	exit
 fi
 
+if [ ! -f config.yaml ]
+then
+    echo Please copy config.yaml.example to config.yaml and edit it with your Digital Ocean token
+    exit
+fi
+
+#PRIVKEYPATH=`cat config.yaml | grep private_key_path | cut -f2 -d' '`
+#if [ ! -f "$PRIVKEYPATH" ]
+#then
+#    echo "You have specified '$PRIVKEYPATH' for your private key path but no file was found there"
+#    exit
+#fi
+
 # set the command stubs we will use and also search for when
 # killing processes
 VAG_CMD="/usr/bin/vagrant up --provider=digital_ocean"

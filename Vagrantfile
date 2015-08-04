@@ -6,6 +6,8 @@ git = YAML::load_file(File.join(__dir__, '.git-branch.yaml'))
 
 Vagrant.configure('2') do |config|
 
+  config.ssh.username = cnf['vagrant_ssh_username']
+
   config.vm.define "centos42f"  do |centos42f|
     centos42f.vm.provider :digital_ocean do |provider, override|
       override.ssh.private_key_path = cnf['private_key_path']

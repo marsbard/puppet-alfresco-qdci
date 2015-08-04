@@ -9,6 +9,11 @@
 #   a new location and use that path here
 private_key_path: ~/.ssh/id_rsa
 
+# vagrant ssh username - if you try to run qdci from a different machine then DO will probably
+# have cached your previous 'vagrant' ssh key, so specify a different ssh name here
+#vagrant_ssh_name=vagrant_homelaptop
+vagrant_ssh_name=vagrant
+
 # the region you want to run in, try running 'vagrant digitalocean-list regions $DIGITAL_OCEAN_TOKEN' (same token as below)
 digital_ocean_region: 'nyc2'
 
