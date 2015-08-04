@@ -1,4 +1,6 @@
 config.yaml
+vagrant.key
+vagrant.key.pub
 .machine_ips.txt
 .ip.*
 reports

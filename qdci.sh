@@ -36,6 +36,13 @@ fi
 VAG_CMD="/usr/bin/vagrant up --provider=digital_ocean"
 TAIL_CMD="tail -F"
 
+
+# generate a separate key for vagrant
+if [ ! -f vagrant.key ]
+then
+  ssh-keygen -f vagrant.key
+fi
+
 function banner {
 	echo
 	echo ===============
@@ -149,6 +156,7 @@ do
 	echo $ADDR > .ip.$machine
 ) > .${machine}.log &
 PIDS="$PIDS $!"
+sleep 2 # try to let the first request settle to get round errors about the key being in use already
 done
 
 (
@@ -181,25 +189,25 @@ for machine in $MACHINES
 do
 	case $machine in
 		ubuntu42f)
-			tail -qF .${machine}.log | awk '{print "\033[34m" $0 "\033[39m"}' 2> /dev/null &
+			tail -qF .${machine}.log 2> /dev/null | awk '{print "\033[34m" $0 "\033[39m"}' &
 			PIDS="$PIDS $!"
 			;;
 		ubuntu50x)
-			tail -qF .${machine}.log | awk '{print "\033[33m" $0 "\033[39m"}' 2> /dev/null &
+			tail -qF .${machine}.log 2> /dev/null | awk '{print "\033[33m" $0 "\033[39m"}' &
 			PIDS="$PIDS $!"
 			;;
 		centos42f)
-			tail -qF .${machine}.log | awk '{print "\033[35m" $0 "\033[39m"}' 2> /dev/null &
+			tail -qF .${machine}.log 2> /dev/null | awk '{print "\033[35m" $0 "\033[39m"}' &
 			PIDS="$PIDS $!"
 			;;
 		centos50x)
-			tail -qF .${machine}.log | awk '{print "\033[32m" $0 "\033[39m"}' 2> /dev/null &
 			PIDS="$PIDS $!"
+			tail -qF .${machine}.log 2> /dev/null | awk '{print "\033[32m" $0 "\033[39m"}' &
 			;;
 	esac
 done
 # and a tail for the testrig build log
-tail -qF .testrig.log | awk '{print "\033[36m" $0 "\033[39m"}' 2> /dev/null &
+tail -qF .testrig.log 2> /dev/null | awk '{print "\033[36m" $0 "\033[39m"}' &
 PIDS="$PIDS $!"
 
 # sleep forever (cleanup is run on signal trap)
