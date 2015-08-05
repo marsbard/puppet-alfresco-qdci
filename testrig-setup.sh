@@ -46,9 +46,9 @@ function try_tests {
     echo machine=$machine
     if [ -z ${tested[machine]} ]
       then
-      #echo ${addrs[$machine]}
       check_httpserv_up $machine "https://${addrs[$machine]}/share/page"
-      if [ $? = 0 ]
+      ERR=$?
+      if [ $ERR = 0 ]
         then
         # run the tests
         echo $machine is up and ready, running the tests
@@ -60,9 +60,12 @@ function try_tests {
           installed_pydeps=/root/tests-${machine}
         fi
         ./runtests.sh  ${installed_pydeps}/testing_virt/venv/bin | awk -vwhich=tests_${machine} '{print which ": " $0}'
-        TRES=$? # 0 if all was well
-        #popd
-        # after tests are completed
+        TRES=$? # 0 if all was well TODO: shall we do something with this info?
+        tested[$machine]=1
+        tested_count=$(( $tested_count + 1 ))
+      fi
+      if [ $ERR = 2 ] # if we get a response >=300 that is probably not going to change so say we have tested
+        then
         tested[$machine]=1
         tested_count=$(( $tested_count + 1 ))
       fi
