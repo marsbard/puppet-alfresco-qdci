@@ -20,7 +20,7 @@ function check_httpserv_up {
   NAME=$1
   URL=$2
   echo check_httpserv_up: $NAME: $URL
-  RES=`wget -T ${WGET_TIMEOUT} --no-check-certificate --server-response $URL 2>&1 | awk '/^  HTTP/{print $2}' | tail -n 1`
+  RES=`wget -O /dev/null -T ${WGET_TIMEOUT} --no-check-certificate --server-response $URL 2>&1 | awk '/^  HTTP/{print $2}' | tail -n 1`
   if [ "$RES" == "" ]
     then
     echo check_httpserv_up: No response from server
