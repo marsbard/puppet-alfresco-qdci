@@ -1,7 +1,5 @@
 #!/bin/sh
 
-OS=`head -n1 /etc/issue | cut -f1 -d\ `
-
 if [ -f /etc/redhat-release ]
 then
 
