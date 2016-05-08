@@ -54,7 +54,7 @@ Vagrant.configure('2') do |config|
 			v.cpus = 2
 		end
 		
-		ubuntu42f.vm.network "public_network"
+	#	ubuntu42f.vm.network "public_network"
 
 		ubuntu42f.vm.box = "ubuntu/trusty64"
     ubuntu42f.vm.provision :shell do |shell|
