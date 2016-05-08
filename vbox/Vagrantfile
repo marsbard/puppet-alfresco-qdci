@@ -1,6 +1,5 @@
 require 'yaml'
 
-cnf = YAML::load_file(File.join(__dir__, 'config.yaml'))
 git = YAML::load_file(File.join(__dir__, '.git-branch.yaml'))
 
 
@@ -12,6 +11,9 @@ Vagrant.configure('2') do |config|
 			v.memory = 3800
 			v.cpus = 2
 		end
+		
+		centos42f.vm.network "public_network"
+
 		centos42f.vm.box = "puppetlabs/centos-6.6-64-puppet"
     centos42f.vm.provision :shell do |shell|
       shell.inline = "OS=`cat /etc/issue | head -n1 | cut -f1 -d' '`; \
@@ -30,6 +32,9 @@ Vagrant.configure('2') do |config|
 			v.memory = 3800
 			v.cpus = 2
 		end
+		
+		centos50x.vm.network "public_network"
+
 		centos50x.vm.box = "puppetlabs/centos-6.6-64-puppet"
     centos50x.vm.provision :shell do |shell|
       shell.inline = "OS=`cat /etc/issue | head -n1 | cut -f1 -d' '`; \
@@ -48,6 +53,9 @@ Vagrant.configure('2') do |config|
 			v.memory = 3800
 			v.cpus = 2
 		end
+		
+		ubuntu42f.vm.network "public_network"
+
 		ubuntu42f.vm.box = "ubuntu/trusty64"
     ubuntu42f.vm.provision :shell do |shell|
       shell.inline = "OS=`cat /etc/issue | head -n1 | cut -f1 -d' '`; \
@@ -66,16 +74,10 @@ Vagrant.configure('2') do |config|
 			v.memory = 3800
 			v.cpus = 2
 		end
+		
+		ubuntu50x.vm.network "public_network"
+
 		ubuntu50x.vm.box = "ubuntu/trusty64"
-    ubuntu50x.vm.provider :digital_ocean do |provider, override|
-      override.ssh.private_key_path = 'vagrant.key'
-      override.vm.box = 'digital_ocean'
-      override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
-      provider.token = cnf['digital_ocean_token']
-      provider.image = 'ubuntu-14-04-x64'
-      provider.region = cnf['digital_ocean_region']
-      provider.size = cnf['digital_ocean_size']
-    end
     ubuntu50x.vm.provision :shell do |shell|
       shell.inline = "OS=`cat /etc/issue | head -n1 | cut -f1 -d' '`; \
         if [ \"$OS\" == \"Debian\" -o \"$OS\" == \"Ubuntu\" ]; \
@@ -86,35 +88,6 @@ Vagrant.configure('2') do |config|
         /vagrant/bootstrap.sh; \
         /vagrant/start.sh ubuntu50x " + git['branch']
     end
-  end
-
-  config.vm.define "testrig" do |testrig|
-    testrig.vm.provider :digital_ocean do |provider, override|
-      override.ssh.private_key_path = 'vagrant.key'
-      override.vm.box = 'digital_ocean'
-      override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
-      provider.token = cnf['digital_ocean_token']
-      provider.image = 'ubuntu-14-04-x64'
-      provider.region = cnf['digital_ocean_region']
-      provider.size = cnf['digital_ocean_size_testvm']
-    end
-    testrig.vm.provision :shell do |shell|
-      shell.inline = "apt-get update; /vagrant/bootstrap.sh; \
-        puppet module install puppetlabs-vcsrepo"
-    end
-
-    testrig.vm.provision :puppet do |puppet|
-      puppet.manifests_path = "puppet/testrig/manifests"
-      puppet.manifest_file  = "init.pp"
-    end
-
-
-    testrig.vm.provision :shell do |shell|
-      shell.path = "testrig-setup.sh"
-    end
-
-
-
   end
 
 
