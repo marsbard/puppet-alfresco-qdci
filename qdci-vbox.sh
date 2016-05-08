@@ -16,7 +16,6 @@ then
 	vagrant destroy -f
 	rm -f bootstrap.sh
 	rm -f start.sh
-	rm -rf manifests
 	exit
 fi
 
@@ -29,7 +28,7 @@ fi
 
 # get these in place for vagrant
 cp bootstrap.sh start.sh $MODE
-cp -r manifests $MODE
+
 
 
 MACHINES="centos42f centos50x ubuntu42f ubuntu50x"

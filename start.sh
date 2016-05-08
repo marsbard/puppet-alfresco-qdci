@@ -1,10 +1,7 @@
 #!/bin/bash
 
-
 TYPE=$1
 BRANCH=$2
-
-echo Running start.sh TYPE=$TYPE BRANCH=$BRANCH
 
 cd /root
 

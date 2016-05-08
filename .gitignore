@@ -13,5 +13,3 @@ vbox/bootstrap.sh
 vbox/start.sh
 digoc/bootstrap.sh
 digoc/start.sh
-vbox/manifests
-digoc/manifests

@@ -1,7 +1,5 @@
 #!/bin/sh
 
-echo Running bootstrap.sh
-
 if [ -f /etc/redhat-release ]
 then
 
