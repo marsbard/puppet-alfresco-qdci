@@ -18,6 +18,15 @@ then
 	exit
 fi
 
+BRANCH=$1
+if [ "$2" != "" ]
+then
+	shift
+	MACHINES="$*"
+	echo Working with supplied machine list: $MACHINES
+	sleep 3
+fi
+
 if [ ! -f config.yaml ]
 then
     echo Please copy config.yaml.example to config.yaml and edit it with your Digital Ocean token
@@ -88,9 +97,9 @@ function cleanup {
 			echo .${machine}.log not found >> $REPNAME
 		fi
 
-		banner Appending catalina.out from $machine to report
-		banner catalina.out on $machine >> $REPNAME
-		vagrant ssh $machine -c "cat /opt/alfresco/tomcat/logs/catalina.out" >> $REPNAME
+		#banner Appending catalina.out from $machine to report
+		#banner catalina.out on $machine >> $REPNAME
+		#vagrant ssh $machine -c "cat /opt/alfresco/tomcat/logs/catalina.out" >> $REPNAME
 
 
 	done
@@ -104,7 +113,7 @@ function cleanup {
 			kill $p 2>&1 > /dev/null
 		fi
 	done
-	sleep 8
+	#sleep 8
 
 
 	for machine in $MACHINES testrig
@@ -135,8 +144,8 @@ trap cleanup INT TERM EXIT
 banner Working with these machines: $MACHINES
 
 # save the branch in a temporary file that the Vagrantfile can find
-echo Saving branch name $1 to .git-branch.yaml
-echo branch: $1 > .git-branch.yaml
+echo Saving branch name $BRANCH to .git-branch.yaml
+echo branch: $BRANCH > .git-branch.yaml
 
 # remove old IP addresses
 rm -f .ip.*
@@ -159,34 +168,34 @@ PIDS="$PIDS $!"
 sleep 2 # try to let the first request settle to get round errors about the key being in use already
 done
 
-(
-# wait for all machines to have told us their IP addresses before starting
-# testrig machine
-COUNT=0
-MACH_LIST=( $MACHINES )
-IPS=""
-while [ $COUNT -lt ${#MACH_LIST[@]} ]
-do
-	COUNT=`ls .ip.* 2> /dev/null | wc -l`
-	echo "Found addresses of $COUNT machines, waiting for ${#MACH_LIST[@]}"
-	if [ $COUNT -lt ${#MACH_LIST[@]} ]
-		then
-		sleep 20
-	fi
-done
-banner Got all IP addresses - bringing up testrig VM
-# we need the machine list in the testrig - it gets copied up with the
-# rsync from vagrant
-export MACHINES
-for machine in $MACHINES
-do
-	IPS="$IPS ${machine}=`cat .ip.${machine}`"
-	export IPS
-	echo $IPS > .machine_ips.txt
-done
-vagrant up --provider=digital_ocean testrig > .testrig.log
-) &
-PIDS="$PIDS $!"
+#(
+## wait for all machines to have told us their IP addresses before starting
+## testrig machine
+#COUNT=0
+#MACH_LIST=( $MACHINES )
+#IPS=""
+#while [ $COUNT -lt ${#MACH_LIST[@]} ]
+#do
+#	COUNT=`ls .ip.* 2> /dev/null | wc -l`
+#	echo "Vagrant completed on $COUNT machines, waiting for ${#MACH_LIST[@]}"
+#	if [ $COUNT -lt ${#MACH_LIST[@]} ]
+#		then
+#		sleep 20
+#	fi
+#done
+#banner Got all IP addresses - bringing up testrig VM
+## we need the machine list in the testrig - it gets copied up with the
+## rsync from vagrant
+#export MACHINES
+#for machine in $MACHINES
+#do
+#	IPS="$IPS ${machine}=`cat .ip.${machine}`"
+#	export IPS
+#	echo $IPS > .machine_ips.txt
+#done
+#vagrant up --provider=digital_ocean testrig > .testrig.log
+#PIDS="$PIDS $!"
+#) &
 
 # set up different coloured tails per machine build log
 for machine in $MACHINES
@@ -211,8 +220,8 @@ do
 	esac
 done
 # and a tail for the testrig build log
-tail -qF .testrig.log 2> /dev/null | awk '{print "\033[36m" $0 "\033[39m"}' &
-PIDS="$PIDS $!"
+#tail -qF .testrig.log 2> /dev/null | awk '{print "\033[36m" $0 "\033[39m"}' &
+#PIDS="$PIDS $!"
 
 # sleep forever (cleanup is run on signal trap)
 wait
