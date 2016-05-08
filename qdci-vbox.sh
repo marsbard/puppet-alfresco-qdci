@@ -10,13 +10,6 @@ then
 fi
 echo MODE=$MODE
 
-if [ "$1" = "clean" ]
-then
-	cd $MODE
-	vagrant destroy -f
-	exit
-fi
-
 
 MACHINES="centos42f centos50x ubuntu42f ubuntu50x"
 
@@ -188,10 +181,10 @@ do
 	#banner $machine
 	LOGS="${LOGS} .${machine}.log"
 (
-	rm -f Vagrantfile
-	ln -s $MODE/Vagrantfile
+  cd $MODE
 	$VAGR_CMD $machine
 	ADDR=`vagrant ssh $machine -- hostname -I`
+	cd ..
 	echo $machine has address $ADDR
 	echo $ADDR > .ip.$machine
 ) > .${machine}.log &
