@@ -1,16 +1,5 @@
 #!/bin/bash
 
-
-WHICH=`basename $0`
-
-MODE=vbox
-if [ $WHICH = "qdci-DO.sh" ]
-then
-	MODE=digoc
-fi
-echo MODE=$MODE
-
-
 MACHINES="centos42f centos50x ubuntu42f ubuntu50x"
 
 cd "`dirname $0`"
@@ -38,9 +27,9 @@ then
 	sleep 3
 fi
 
-if [ "$MODE" = "digoc" -a ! -f digoc/config.yaml ]
+if [ ! -f config.yaml ]
 then
-    echo Please copy digoc/config.yaml.example to digoc/config.yaml and edit it with your Digital Ocean token
+    echo Please copy config.yaml.example to config.yaml and edit it with your Digital Ocean token
     exit
 fi
 
@@ -53,24 +42,15 @@ fi
 
 # set the command stubs we will use and also search for when
 # killing processes
-
-if [ $MODE = "digoc" ]
-then
-	VAGR_CMD="/usr/bin/vagrant up --provider=digital_ocean"
-  # generate a separate key for vagrant
-  if [ ! -f digoc/vagrant.key ]
-  then
-    ssh-keygen -f digoc/vagrant.key
-  fi
-fi
-
-if [ $MODE = "vbox" ]
-then
-  VAGR_CMD="/usr/bin/vagrant up --provider=virtualbox"
-fi
+VAG_CMD="/usr/bin/vagrant up --provider=digital_ocean"
 TAIL_CMD="tail -F"
 
 
+# generate a separate key for vagrant
+if [ ! -f vagrant.key ]
+then
+  ssh-keygen -f vagrant.key
+fi
 
 function banner {
 	echo
@@ -100,7 +80,7 @@ function cleanup {
 
 	mkdir -p reports/$TS
 
-	BRANCH=`cat $MODE/.git-branch.yaml`
+	BRANCH=`cat .git-branch.yaml`
 	banner Cleaning up and producing reports for $BRANCH
 
 	for machine in $MACHINES testrig
@@ -148,15 +128,13 @@ function cleanup {
 		# vagrant halt $machine
 		#
 		# # # and vagrant
-		# # find_destroy_proc $VAGR_CMD $machine
+		# # find_destroy_proc $VAG_CMD $machine
 		#
 		# vagrant destroy -f $machine
 	done
 
 	banner No machines were destroyed, running vagrant status:
-	cd $MODE
 	vagrant status
-	cd ..
 
 	exit 0
 }
@@ -166,8 +144,8 @@ trap cleanup INT TERM EXIT
 banner Working with these machines: $MACHINES
 
 # save the branch in a temporary file that the Vagrantfile can find
-echo Saving branch name $BRANCH to $MODE/.git-branch.yaml
-echo branch: $BRANCH > $MODE/.git-branch.yaml
+echo Saving branch name $BRANCH to .git-branch.yaml
+echo branch: $BRANCH > .git-branch.yaml
 
 # remove old IP addresses
 rm -f .ip.*
@@ -181,10 +159,8 @@ do
 	#banner $machine
 	LOGS="${LOGS} .${machine}.log"
 (
-  cd $MODE
-	$VAGR_CMD $machine
+	$VAG_CMD $machine
 	ADDR=`vagrant ssh $machine -- hostname -I`
-	cd ..
 	echo $machine has address $ADDR
 	echo $ADDR > .ip.$machine
 ) > .${machine}.log &

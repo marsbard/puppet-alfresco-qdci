@@ -1,1 +1,0 @@
-qdci-vbox.sh
