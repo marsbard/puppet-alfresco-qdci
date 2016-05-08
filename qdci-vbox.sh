@@ -19,12 +19,6 @@ then
 	exit
 fi
 
-if [ "$1" = "status" ]
-then
-	cd $MODE
-	vagrant status
-	exit
-fi
 
 # get these in place for vagrant
 cp bootstrap.sh start.sh $MODE
