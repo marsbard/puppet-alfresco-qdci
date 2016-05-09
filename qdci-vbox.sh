@@ -77,7 +77,7 @@ fi
 
 if [ $MODE = "digoc" ]
 then
-	VAGR_CMD="/usr/bin/vagrant up --provider=digital_ocean"
+	VAGR_CMD="vagrant up --provider=digital_ocean"
   # generate a separate key for vagrant
   if [ ! -f digoc/vagrant.key ]
   then
@@ -87,7 +87,7 @@ fi
 
 if [ $MODE = "vbox" ]
 then
-  VAGR_CMD="/usr/bin/vagrant up --provider=virtualbox"
+  VAGR_CMD="vagrant up --provider=virtualbox"
 fi
 TAIL_CMD="tail -F"
 

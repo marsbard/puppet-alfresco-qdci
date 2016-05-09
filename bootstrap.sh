@@ -37,14 +37,4 @@ EOF
 
 fi
 
-if [ $OS = "Arch" ]
-then
-  mkdir -p /tmp/puppet
-  cd /tmp/puppet
-  gem install facter
-  gem install hiera
-  gem install json_pure
-  gem install puppet
-fi
-
 
