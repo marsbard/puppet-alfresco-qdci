@@ -9,7 +9,7 @@ then
 
         # TODO need to work this out for RedHat too (perhaps it Just Works?)
         # CentOS like: CentOS release 6.6 (Final)
-	EL_MAJ_VER=`head -n1 /etc/redhat-release | cut -f4 -d\ | cut -f1 -d.`
+	      EL_MAJ_VER=`rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f3`
         rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-${EL_MAJ_VER}.noarch.rpm
         yum install -y puppet
 	yum install -y git
