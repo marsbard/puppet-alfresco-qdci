@@ -11,8 +11,9 @@ then
         # CentOS like: CentOS release 6.6 (Final)
 	      EL_MAJ_VER=`rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f3`
         rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-${EL_MAJ_VER}.noarch.rpm
-        yum install -y puppet
-	yum install -y git
+				yum clean all
+				yum install -y deltarpm
+        yum install -y puppet git 
 fi
 
 if [ -f /etc/debian_version ]
