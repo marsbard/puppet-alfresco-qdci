@@ -8,7 +8,7 @@ Vagrant.configure('2') do |config|
 
   config.vm.define "centos42f"  do |centos42f|
 		centos42f.vm.provider "virtualbox" do |v|
-			v.memory = 3800
+			v.memory = 4000
 			v.cpus = 2
 		end
 		
@@ -22,6 +22,8 @@ Vagrant.configure('2') do |config|
         if [ \"$OS\" == \"Debian\" -o \"$OS\" == \"Ubuntu\" ]; \
           then apt-get update; \
         else \
+					yum clean all
+					yum install -y deltarpm
           yum -y update; \
         fi; \
         /vagrant/bootstrap.sh; \
@@ -31,7 +33,7 @@ Vagrant.configure('2') do |config|
 
   config.vm.define "centos50x"  do |centos50x|
 		centos50x.vm.provider "virtualbox" do |v|
-			v.memory = 3800
+			v.memory = 4000
 			v.cpus = 2
 		end
 		
@@ -53,7 +55,7 @@ Vagrant.configure('2') do |config|
 
   config.vm.define "ubuntu42f" do |ubuntu42f|
 		ubuntu42f.vm.provider "virtualbox" do |v|
-			v.memory = 3800
+			v.memory = 4000
 			v.cpus = 2
 		end
 		
@@ -75,7 +77,7 @@ Vagrant.configure('2') do |config|
 
   config.vm.define "ubuntu50x" do |ubuntu50x|
 		ubuntu50x.vm.provider "virtualbox" do |v|
-			v.memory = 3800
+			v.memory = 4000
 			v.cpus = 2
 		end
 		
