@@ -122,7 +122,7 @@ function cleanup {
 
 	mkdir -p reports/$TS
 
-	BRANCH=`cat $MODE/.git-branch.yaml`
+	BRANCH=`cat $MODE/.git-branch.yaml | cut -f2 -d' ' `
 	banner Cleaning up and producing reports for $BRANCH
 
 	for machine in $MACHINES testrig
