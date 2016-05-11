@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -x
-
 cd "`dirname $0`/.."
 
 MACHINES="centos42f centos50x ubuntu42f ubuntu50x"
@@ -23,7 +21,7 @@ do
   mkdir -p .suite/$mach
 
 	pushd vbox
-	acho branch: $BRANCH > .git-branch.yaml
+	echo branch: $BRANCH > .git-branch.yaml
 
 	vagrant up $mach
 
