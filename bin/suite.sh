@@ -31,7 +31,8 @@ do
 	USER=`echo "$CNF" | grep "User " | cut -f2 -d' '`
 	KEYP=`echo "$CNF" | grep IdentityFile | cut -f2 -d' ' | sed "s/\"//g"`
 
-	CMD="scp -P $PORT -i $KEYP ${USER}@${HOST}:/tmp/testres/* ../.suite/$mach"
+	SCP_OPTS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $PORT -i $KEYP"
+	CMD="scp $SCP_OPTS ${USER}@${HOST}:/tmp/testres/* ../.suite/$mach"
 	echo $CMD
 	$CMD
 
