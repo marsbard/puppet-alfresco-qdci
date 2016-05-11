@@ -1,7 +1,7 @@
 #!/bin/bash
 
 git clone https://github.com/marsbard/alfresco-tests.git
-cd alfresco-tests.git
+cd alfresco-tests
 
 cat <<EOF > config.yml
 user: admin
@@ -22,4 +22,4 @@ imap_port: 8143
 EOF
 
 ./install.sh
-./runtests.sh
+./runtests.sh ./testing_virt/venv/bin
