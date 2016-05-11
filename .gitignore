@@ -1,4 +1,5 @@
 config.yaml
+.suite
 vagrant.key
 vagrant.key.pub
 .machine_ips.txt
