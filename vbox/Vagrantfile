@@ -52,7 +52,7 @@ Vagrant.configure('2') do |config|
         /vagrant/bootstrap.sh; \
         /vagrant/start.sh centos50x " + git['branch']
     end
-		centos50f.vm.provision :shell, path: "tests.sh"
+		centos50x.vm.provision :shell, path: "tests.sh"
   end
 
   config.vm.define "ubuntu42f" do |ubuntu42f|
