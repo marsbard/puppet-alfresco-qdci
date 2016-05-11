@@ -18,3 +18,4 @@ digoc/bootstrap.sh
 digoc/start.sh
 vbox/manifests
 digoc/manifests
+vbox/.git-branch.yml

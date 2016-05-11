@@ -21,15 +21,15 @@ do
   mkdir -p .suite/$mach
 
 	pushd vbox
-	echo $BRANCH > .git-branch.yml
+	echo $BRANCH > .git-branch.yaml
 
 	vagrant up $mach
 
   CNF=`vagrant ssh-config $mach | cut -c3-`
-	HOST=`echo $CNF | grep HostName | cut -f2 -d' '`
-	PORT=`echo $CNF | grep Port | cut -f2 -d' '`
-	USER=`echo $CNF | grep User | cut -f2 -d' '`
-	KEYP=`echo $CNF | grep IdentityFile | cut -f2 -d' '`
+	HOST=`echo "$CNF" | grep HostName | cut -f2 -d' '`
+	PORT=`echo "$CNF" | grep Port | cut -f2 -d' '`
+	USER=`echo "$CNF" | grep "User " | cut -f2 -d' '`
+	KEYP=`echo "$CNF" | grep IdentityFile | cut -f2 -d' ' | sed "s/\"//g"`
 
 	CMD="scp -P $PORT -i $KEYP ${USER}@${HOST}:/tmp/testres/* ../.suite/$mach"
 	echo $CMD
