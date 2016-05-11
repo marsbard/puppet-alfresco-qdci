@@ -31,7 +31,9 @@ do
 	USER=`echo $CNF | grep User | cut -f2 -d' '`
 	KEYP=`echo $CNF | grep IdentityFile | cut -f2 -d' '`
 
-	scp -P $PORT ${USER}@${HOST} -i $KEYP /tmp/testres/* ../.suite/$mach
+	CMD="scp -P $PORT -i $KEYP ${USER}@${HOST}:/tmp/testres/* ../.suite/$mach"
+	echo $CMD
+	$CMD
 
 	vagrant destroy -f $mach
 	
