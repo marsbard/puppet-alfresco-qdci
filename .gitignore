@@ -11,6 +11,8 @@ puppet-alfresco
 .*.log
 vbox/bootstrap.sh
 vbox/start.sh
+vbox/tests.sh
+digoc/tests.sh
 digoc/bootstrap.sh
 digoc/start.sh
 vbox/manifests
