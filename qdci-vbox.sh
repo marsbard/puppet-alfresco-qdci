@@ -17,6 +17,7 @@ then
 	rm -f bootstrap.sh
 	rm -f start.sh
 	rm -rf manifests
+	rm -f tests.sh
 	exit
 fi
 
@@ -28,7 +29,7 @@ then
 fi
 
 # get these in place for vagrant
-cp bootstrap.sh start.sh $MODE
+cp tests.sh bootstrap.sh start.sh $MODE
 cp -r manifests $MODE
 
 
