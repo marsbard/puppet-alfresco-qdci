@@ -39,4 +39,5 @@ fi
 echo "Copying old .downloads folder in place"
 mkdir -p /opt/downloads
 cp -rv /vagrant/.downloads/* /opt/downloads
+chmod -R a+rwx /opt/downloads
 

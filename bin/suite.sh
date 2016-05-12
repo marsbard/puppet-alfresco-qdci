@@ -32,7 +32,7 @@ do
 	# instead going to put 'rsync /vagrant/.downloads /opt/downloads' in bootstrap.sh
 
 	vagrant destroy -f $mach
-	vagrant up $mach
+	vagrant up $mach | tee ../.suite/$mach/buildlog
 
   CNF=`vagrant ssh-config $mach | cut -c3-`
 	HOST=`echo "$CNF" | grep HostName | cut -f2 -d' '`
@@ -46,6 +46,8 @@ do
 	$CMD
 
   rsync_from $mach /opt/downloads/* ./.downloads
+	# delete the unpacked stuff, may be causing inter-vm erros
+	ls -F .downloads/ |grep / | while read line; do echo "Removing $line"; rm -rf ".downloads/$line"; done
 
 	#vagrant destroy -f $mach
 	# don't destroy it, we might need to look at it
