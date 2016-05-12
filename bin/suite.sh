@@ -2,6 +2,8 @@
 
 cd "`dirname $0`/.."
 
+. bin/vagscp.inc.sh
+
 MACHINES="centos42f centos50x ubuntu42f ubuntu50x"
 
 if [ "$1" = "" ]
@@ -23,6 +25,7 @@ do
 	pushd vbox
 	echo branch: $BRANCH > .git-branch.yaml
 
+	rsync_to $mach ./.downloads/* /opt/downloads
 
 	vagrant destroy -f $mach
 	vagrant up $mach
@@ -37,6 +40,8 @@ do
 	CMD="scp $SCP_OPTS ${USER}@${HOST}:/tmp/testres/* ../.suite/$mach"
 	echo $CMD
 	$CMD
+
+  rsync_from $mach /opt/downloads/* ./.downloads
 
 	#vagrant destroy -f $mach
 	# don't destroy it, we might need to look at it
