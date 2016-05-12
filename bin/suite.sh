@@ -23,6 +23,8 @@ do
 	pushd vbox
 	echo branch: $BRANCH > .git-branch.yaml
 
+
+	vagrant destroy -f $mach
 	vagrant up $mach
 
   CNF=`vagrant ssh-config $mach | cut -c3-`
@@ -36,7 +38,9 @@ do
 	echo $CMD
 	$CMD
 
-	vagrant destroy -f $mach
+	#vagrant destroy -f $mach
+	# don't destroy it, we might need to look at it
+	vagrant halt $mach
 	
 	popd
 
