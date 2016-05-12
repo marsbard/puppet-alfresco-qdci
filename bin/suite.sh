@@ -23,11 +23,13 @@ do
   mkdir -p .suite/$mach
 
 	pushd vbox
+	mkdir -p .downloads
+
 	echo branch: $BRANCH > .git-branch.yaml
 
 	# d'oh! machine not up yet!
 	#rsync_to $mach ./.downloads /opt/downloads
-	# instead going to put 'rsync /vagrant/.downloads /opt/downloads' in vagrantfile
+	# instead going to put 'rsync /vagrant/.downloads /opt/downloads' in bootstrap.sh
 
 	vagrant destroy -f $mach
 	vagrant up $mach

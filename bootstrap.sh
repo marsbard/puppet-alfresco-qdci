@@ -37,5 +37,6 @@ EOF
 fi
 
 echo "Copying old .downloads folder in place"
-rsync -vrz /vagrant/.downloads /opt/downloads
+mkdir -p /opt/downloads
+cp -rv /vagrant/.downloads/* /opt/downloads
 
