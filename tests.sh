@@ -1,6 +1,6 @@
 #!/bin/bash
 
-git clone https://github.com/marsbard/alfresco-tests.git
+git clone https://github.com/digcat/alfresco-tests.git
 cd alfresco-tests
 
 cat <<EOF > config.yml
