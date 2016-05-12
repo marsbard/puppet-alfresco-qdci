@@ -26,7 +26,7 @@ then
         wget http://apt.puppetlabs.com/puppetlabs-release-precise.deb
         apt-get install puppet -y
 
-	apt-get install git -y
+      	apt-get install git -y
 
         cat > /etc/default/puppet <<EOF
 START=yes
@@ -36,4 +36,6 @@ EOF
 
 fi
 
+echo "Copying old .downloads folder in place"
+rsync -vrz /vagrant/.downloads /opt/downloads
 

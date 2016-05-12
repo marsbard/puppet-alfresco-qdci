@@ -28,7 +28,7 @@ function rsync_to # $mach, $host_loc, $vagr_loc
 	get_ssh_settings $mach
 
 	set -x
-	ssh $_VSSH_OPTS -p $PORT -i $KEYP ${USER}@${HOST} sudo chown -R $USER $vagr_loc
+	#ssh $_VSSH_OPTS -p $PORT -i $KEYP ${USER}@${HOST} sudo chown -R $USER $vagr_loc
 	rsync -avz -e "ssh -p $PORT $_VSSH_OPTS -i $KEYP" $host_loc ${USER}@${HOST}:${vagr_loc}
 	set +x
 }
@@ -41,7 +41,7 @@ function rsync_from # $mach, $vagr_loc, $host_loc
 	get_ssh_settings $mach
 
 	set -x
-	ssh $_VSSH_OPTS -p $PORT -i $KEYP ${USER}@${HOST} sudo chown -R $USER $vagr_loc
+	#ssh $_VSSH_OPTS -p $PORT -i $KEYP ${USER}@${HOST} sudo chown -R $USER $vagr_loc
 	rsync -avz -e "ssh -p $PORT $_VSSH_OPTS -i $KEYP" ${USER}@${HOST}:${vagr_loc} $host_loc
 	set +x
 }

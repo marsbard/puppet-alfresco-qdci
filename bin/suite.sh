@@ -25,7 +25,9 @@ do
 	pushd vbox
 	echo branch: $BRANCH > .git-branch.yaml
 
-	rsync_to $mach ./.downloads/* /opt/downloads
+	# d'oh! machine not up yet!
+	#rsync_to $mach ./.downloads /opt/downloads
+	# instead going to put 'rsync /vagrant/.downloads /opt/downloads' in vagrantfile
 
 	vagrant destroy -f $mach
 	vagrant up $mach
