@@ -1,0 +1,16 @@
+
+Ports exposed:
+
+Tomcat
+ 	centos42f - 18443, 
+	centos50x - 18444, 
+	ubuntu42f - 18445, 
+	ubuntu50x - 18446
+
+Monitorix
+ http://localhost:<port>/monitorix 
+ where <port> is: 
+ 	centos42f - 18080, 
+	centos50x - 18081, 
+	ubuntu42f - 18082, 
+	ubuntu50x - 18083
